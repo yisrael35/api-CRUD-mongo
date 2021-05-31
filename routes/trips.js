@@ -26,15 +26,41 @@ const Tour = require('../models/tour')
             res.status(201).send(guide)
         ).catch(e=>res.status(400).send(e))
     },
+    
+    createSiteInPath: function (req, res) 
+    {
+        const tripId = req.params["id"];
+        if (!tripId) return res.status(400).send('Id is missing!');
+       
+        const updates = Object.keys(req.body);
+        const allowedUpdates = ['name', 'country'];
+        const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
+    
+        if (!isValidOperation) {
+            return res.status(400).send({ error: 'Invalid updates!' })
+        }
+        // Tour.updateOne({ name: tripId},  { $push: { path: req.body } },done);
+
+        Tour.updateOne({name : req.params.id},  { $push: {path: req.body }}, { new: true, runValidators: false }).then(tour => {//disabled runValidators
+            if (!tour) {
+                return res.status(404).send()
+            }
+            else {
+                console.log(tour)
+                res.send(tour)
+            }
+        }).catch(e => res.status(400).send(e))
+    
+        //     if(!req.body) return res.status(400).send('Body is missing!');
+        //     if (!tripId) return res.status(400).send('Id is missing!');
+        //     if(!req.body.name || !req.body.country) return res.status(400).send('fields are missing!');
+           
+    },
+
     //READ
     getTours: function (req, res) {
-        // Tour.find().then(tours =>//sort -- need to check .sort(name)
-        //     res.send(tours.sort())
-        // ).catch(e => res.status(500).send())
         Tour.find().populate('guide').then(tours => res.send(tours.sort())
         ).catch (e=> res.status(500).send())
-
-
     },
     getGuides: function (req, res) {
         Guide.find().then(guides =>//sort -- need to check .sort(name)
@@ -47,7 +73,7 @@ const Tour = require('../models/tour')
         if (!tripId) return res.status(400).send('Id is missing!');
 
 
-        Tour.findById(tripId).populate('guide').then(tours =>
+        Tour.findById({name:tripId}).populate('guide').then(tours =>
             res.send(tours)
         ).catch(e => res.status(500).send())
 
@@ -55,9 +81,8 @@ const Tour = require('../models/tour')
         //     res.send(tours)
         // ).catch(e => res.status(500).send())
     },
+    //--------------------- UPDATE------------------------------------
 
-
-    // UPDATE
     updateTour: function (req, res) {
 
         
@@ -72,7 +97,7 @@ const Tour = require('../models/tour')
                 return res.status(400).send({ error: 'Invalid updates!' })
             }
         
-            Tour.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true }).then(tour => {
+            Tour.updateOne({name : req.params.id}, req.body, { new: true, runValidators: true }).then(tour => {
                 if (!tour) {
                     return res.status(404).send()
                 }
@@ -95,43 +120,13 @@ const Tour = require('../models/tour')
         //     true);
     },
 
-    createSiteInPath: function (req, res) 
-    {
-        const tripId = req.params["id"];
-        if (!tripId) return res.status(400).send('Id is missing!');
-       
-        const updates = Object.keys(req.body);
-        const allowedUpdates = ['name', 'country'];
-        const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
-    
-        if (!isValidOperation) {
-            return res.status(400).send({ error: 'Invalid updates!' })
-        }
-        // Tour.updateOne({ name: tripId},  { $push: { path: req.body } },done);
-
-        Tour.findByIdAndUpdate(req.params.id,  { $push: {path: req.body }}, { new: true, runValidators: false }).then(tour => {//disabled runValidators
-            if (!tour) {
-                return res.status(404).send()
-            }
-            else {
-                console.log(tour)
-                res.send(tour)
-            }
-        }).catch(e => res.status(400).send(e))
-    
-        //     if(!req.body) return res.status(400).send('Body is missing!');
-        //     if (!tripId) return res.status(400).send('Id is missing!');
-        //     if(!req.body.name || !req.body.country) return res.status(400).send('fields are missing!');
-           
-    },
-
 //--------------------- DELETE------------------------------------
     deleteSite: function (req, res)
     {
         const tripId = req.params["id"];
         const siteName = req.params["site_name"];
         if(siteName == null|| tripId == null) return res.status(400).send('id or site name is missing!');
-        Tour.findByIdAndUpdate(tripId,  { $pull: {path: {name: siteName} }}, { new: true, runValidators: false }).then(tour => {//disabled runValidators
+        Tour.updateOne({name:tripId},  { $pull: {path: {name: siteName} }}, { new: true, runValidators: false }).then(tour => {//disabled runValidators
             if (!tour) {
                 return res.status(404).send()
             }
@@ -145,7 +140,10 @@ const Tour = require('../models/tour')
     deleteTour: function (req, res) {
         const tripId = req.params["id"];
         if (!tripId) return res.status(400).send('Id is missing!');
-        Tour.remove(tripId);//name or id??????????????
+        Tour.remove({name:tripId}).then(tour => res.send(tour)
+        ).catch (e=> res.status(500).send());//name or id??????????????
+
+
     }
 };
 

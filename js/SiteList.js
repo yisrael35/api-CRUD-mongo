@@ -1,6 +1,5 @@
-// Yisrael Bar & May Moshe  04/05/21
+// Yisrael Bar 30-31/05/21
 
-// 60b40381fef40a2a80b6b1a7 guide id
 let toursArray = [];
 const br =  $("<br>");
 let saveId = -1;
@@ -327,13 +326,13 @@ function updateTourRequest(){
     if(!$("#tour_form").valid()) return;
   
     // console.log("in submit");
-    let guide ={
-      "name": $("#guide_name").val(),
-      "email": $("#guide_email").val(),
-      "cellular": $("#guide_cellular").val(),
-    }
-    
-    let path = toursArray[saveId][1].path;
+    // let guide ={
+    //   "name": $("#guide_name").val(),
+    //   "email": $("#guide_email").val(),
+    //   "cellular": $("#guide_cellular").val(),
+    // }
+    // let guide =toursArray[saveId].guide._id; 
+    // let path = toursArray[saveId].path;
     
     // process the form
     $.ajax({
@@ -341,12 +340,12 @@ function updateTourRequest(){
         url: '/updateTour/'+ $("#id_field").text(), // the url where we want to POST
         contentType: 'application/json',
         data: JSON.stringify({
-            "id": $("#id_field").text(),
+            // "id": $("#id_field").text(),
             "start_date": $("#start_date").val(),
             "duration": $("#duration").val(),
             "price": $("#price").val(),
-            "guide": guide,
-            "path": path,             
+            // "guide": guide,
+            // "path": path,             
         }),
         processData: false,            
        // dataType: 'json', // what type of data do we expect back from the server
@@ -431,23 +430,23 @@ function updateValidation (){
         digits: true,   
         min: 1,
       },
-      "guide_name":{
-        required: true,
-        digits: false,   
-        minlength: 2,
-      },
-      "guide_email":{
-        required: true,
-        digits: false,   
-        minlength: 5,
-        email: true,
-      },
-      "guide_cellular":{
-        required: true,
-        digits: true,   
-        minlength: 10,
-        min: 1,
-      },
+      // "guide_name":{
+      //   required: true,
+      //   digits: false,   
+      //   minlength: 2,
+      // },
+      // "guide_email":{
+      //   required: true,
+      //   digits: false,   
+      //   minlength: 5,
+      //   email: true,
+      // },
+      // "guide_cellular":{
+      //   required: true,
+      //   digits: true,   
+      //   minlength: 10,
+      //   min: 1,
+      // },
       "site":{
         required: false,
         digits: false,   
@@ -480,20 +479,20 @@ function updateValidation (){
         min: "The number heve to be bigger then zero",
 
       },
-      guide_name:{
-        minlength: "Your name must be at least 2 characters long",
-      },
-      guide_email:{
-        minlength: "Your name must be at least 5 characters long",
-        email:"You have email in form of:  NameExample@site.com"
+      // guide_name:{
+      //   minlength: "Your name must be at least 2 characters long",
+      // },
+      // guide_email:{
+      //   minlength: "Your name must be at least 5 characters long",
+      //   email:"You have email in form of:  NameExample@site.com"
       
-      },
-      guide_cellular:{
-        minlength: "Your name must be at least 10 characters long",
-        min: "The number heve to be bigger then zero",
-        digits:"Please enter only digits",
+      // },
+      // guide_cellular:{
+      //   minlength: "Your name must be at least 10 characters long",
+      //   min: "The number heve to be bigger then zero",
+      //   digits:"Please enter only digits",
 
-      },
+      // },
       site:{
         minlength: "Your name must be at least 2 characters long",
       },

@@ -7,8 +7,7 @@ const express = require('express'),
 const port = 3001;
 ///--------------------------------
 require('./db/mongoose');
-// const tourRouter = require('./dbRoutes/tour');
-// const guideRouter = require('./dbRoutes/guide');
+
 
 
 const app=express();
@@ -21,9 +20,7 @@ app.use('/add_guide', express.static(path.join(__dirname, 'html/add_guide_form.h
 app.use('/js', express.static(path.join(__dirname, 'js')));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-//----------------------------------------
-// app.use(tourRouter);
-// app.use(guideRouter);
+
 
 
 //restfull 
