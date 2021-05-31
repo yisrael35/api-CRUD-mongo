@@ -22,6 +22,12 @@ var tourSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    path:{
+        required: false,
+        type: Array,
+        trim: true
+
+    },
     guide: { type: mongoose.Schema.Types.ObjectId, ref: 'Guide',required:true},
 }, { timestamps: true });
 tourSchema.plugin(id_validator);

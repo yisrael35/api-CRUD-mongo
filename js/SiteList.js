@@ -1,6 +1,6 @@
 // Yisrael Bar & May Moshe  04/05/21
 
-
+// 60b40381fef40a2a80b6b1a7 guide id
 let toursArray = [];
 const br =  $("<br>");
 let saveId = -1;
@@ -40,13 +40,16 @@ function displayTours(){
   closeAddSite();
   let allTours = $("<div></div>").attr('class',"allTours");
 
+  // console.log(toursArray[0]);
+  
   for(let i = 0; i< toursArray.length; i++ ){
+   
     let singleTour = $("<div></div>").attr('class',"singleTour");
-    let tourName = $("<span></span>").attr('class',toursArray[i][0]).text(toursArray[i][0] + "  ");
-    let displayTourBt = $("<button></button>").text("Display Tour").attr('class',toursArray[i][0]).attr('id',i);
-    let editTourBt = $("<button></button>").text("Edit").attr('class',toursArray[i][0]);
-    let deleteTourBt = $("<button></button>").text("Delete").attr('class',toursArray[i][0]);
-    let addSiteBt = $("<button></button>").text("Add Site").attr('class',toursArray[i][0]);
+    let tourName = $("<span></span>").attr('class',toursArray[i].name).text(toursArray[i].name + "  ");
+    let displayTourBt = $("<button></button>").text("Display Tour").attr('class',toursArray[i].name).attr('id',i);
+    let editTourBt = $("<button></button>").text("Edit").attr('class',toursArray[i].name);
+    let deleteTourBt = $("<button></button>").text("Delete").attr('class',toursArray[i].name);
+    let addSiteBt = $("<button></button>").text("Add Site").attr('class',toursArray[i].name);
 
     displayTourBt.click(displayTour);
     editTourBt.click(editTour);
@@ -73,12 +76,12 @@ function displayTour(event){
   closeAddSite();
   let displaySingleTour = $("<div></div>").attr('class',"displaySingleTour");
   let i = event.target.id;
-  let tourName = $("<br><div></div><br>").text(toursArray[i][0]);
-  let start_date =$("<div></div>").text("Start date: " + toursArray[i][1].start_date);
-  let duration =$("<div></div>").text("Duration: " + toursArray[i][1].duration + " Days");
-  let price = $("<div></div>").text("Price: " + toursArray[i][1].price);
-  let guide = $("<br><button></button>").text("Guide").attr('class',toursArray[i][0]);
-  let path = $("<button></button>").text("Path").attr('class',toursArray[i][0]);
+  let tourName = $("<br><div></div><br>").text(toursArray[i].name);
+  let start_date =$("<div></div>").text("Start date: " + toursArray[i].start_date);
+  let duration =$("<div></div>").text("Duration: " + toursArray[i].duration + " Days");
+  let price = $("<div></div>").text("Price: " + toursArray[i].price);
+  let guide = $("<br><button></button>").text("Guide").attr('class',toursArray[i].name);
+  let path = $("<button></button>").text("Path").attr('class',toursArray[i].name);
   guide.click(displayGuide);
   path.click(displayPath);
 
@@ -102,7 +105,7 @@ function displayTour(event){
 function getId(class_Name){
   let res = -1;
   for(let i =0 ; i < toursArray.length; i++){
-    class_Name === toursArray[i][0] ? res= i: null;
+    class_Name === toursArray[i].name ? res= i: null;
   }
   return res;
 }
@@ -118,33 +121,32 @@ function editTour(event){
   $("#displayTour").empty();
   $("#displayDetailes").empty();
   $("#editTour").show();
-  $("#id_field").text(toursArray[i][1].id);
+  $("#id_field").text(toursArray[i].name);
   $("#displayDate").empty();
-  $("#displayDate").append($("<div></div>").text("The current date is: "+toursArray[i][1].start_date));
-  $("#start_date").val(toursArray[i][1].start_date);
-  $("#duration").val(toursArray[i][1].duration);
-  $("#price").val(toursArray[i][1].price);
-  $("#guide_name").val(toursArray[i][1].guide.name);
-  $("#guide_email").val(toursArray[i][1].guide.email);
-  $("#guide_cellular").val(toursArray[i][1].guide.cellular);
+  $("#displayDate").append($("<div></div>").text("The current date is: "+toursArray[i].start_date));
+  $("#start_date").val(toursArray[i].start_date);
+  $("#duration").val(toursArray[i].duration);
+  $("#price").val(toursArray[i].price);
+  // $("#guide_name").val(toursArray[i].guide.name);
+  // $("#guide_email").val(toursArray[i][1].guide.email);
+  // $("#guide_cellular").val(toursArray[i][1].guide.cellular);
 
   // $("#site").val(toursArray[i][1].path[0].name);
   // $("#country").val(toursArray[i][1].path[0].country);
-
-  for(let j = 0 ; j < toursArray[i][1].path.length ; j++)
+  $("#path").empty();
+  for(let j = 0 ; j < toursArray[i].path.length ; j++)
   {
     let newSite = $("<div></div>").attr('class',"newSite");
     let nameLabel = $("<label for='name'></label>").text("Site Name: ");
-    let nameInputType = $("<span type='text' name='name'></span>").text(toursArray[i][1].path[j].name + ", ").attr('class',"site");
+    let nameInputType = $("<span type='text' name='name'></span>").text(toursArray[i].path[j].name + ", ").attr('class',"site");
       
     let countryLabel = $("<label for='country'></label>").text("Site Country: ");
-    let countryInputType = $("<span type='text' name='country'></span>").text(toursArray[i][1].path[j].country + " ").attr('class',"country");
+    let countryInputType = $("<span type='text' name='country'></span>").text(toursArray[i].path[j].country + " ").attr('class',"country");
     newSite.append(nameLabel);
     newSite.append(nameInputType);
     newSite.append(countryLabel);
     newSite.append(countryInputType);
     $("#path").append(newSite);
-
   }
 
   // $("#editTour").append(editTour);
@@ -180,9 +182,9 @@ function displayGuide(event){
   let i = getId(event.target.className);
   $("#displayDetailes").empty();
   let displayDetaile = $("<div></div>").attr('class',"displayDetaile");
-  let name =  $("<div></div>").attr('class',"displayDetaile").text("Name: " + toursArray[i][1].guide.name);
-  let email =  $("<div></div>").attr('class',"displayDetaile").text("Email: " + toursArray[i][1].guide.email);
-  let cellular =  $("<div></div>").attr('class',"displayDetaile").text("Cellular: " + toursArray[i][1].guide.cellular);
+  let name =  $("<div></div>").attr('class',"displayDetaile").text("Name: " + toursArray[i].guide.name);
+  let email =  $("<div></div>").attr('class',"displayDetaile").text("Email: " + toursArray[i].guide.email);
+  let cellular =  $("<div></div>").attr('class',"displayDetaile").text("Cellular: " + toursArray[i].guide.cellular);
   displayDetaile.append(name);
   displayDetaile.append(email);
   displayDetaile.append(cellular);
@@ -193,11 +195,11 @@ function displayPath(event){
   let i = getId(event.target.className);
   $("#displayDetailes").empty();
   let displayDetaile = $("<div></div>").attr('class',"displayDetaile");
- for(let j =0 ; j < toursArray[i][1].path.length; j++){
+ for(let j =0 ; j < toursArray[i].path.length; j++){
     let displaySinglePath = $("<div></div>").attr('class',"displaySinglePath");
-    let name =  $("<span></span>").attr('class',"displayDetaile").text("Name: " + toursArray[i][1].path[j].name + " ");
-    let country =  $("<br><span></span>").attr('class',"displayDetaile").text("Country: " + toursArray[i][1].path[j].country);
-    let delete_Site = $("<br><button></button>").text("delete Site").attr('class',toursArray[i][0]).attr('id',toursArray[i][1].path[j].name);
+    let name =  $("<span></span>").attr('class',"displayDetaile").text("Name: " + toursArray[i].path[j].name + " ");
+    let country =  $("<br><span></span>").attr('class',"displayDetaile").text("Country: " + toursArray[i].path[j].country);
+    let delete_Site = $("<br><button></button>").text("delete Site").attr('class',toursArray[i].name).attr('id',toursArray[i].path[j].name);
     
     delete_Site.click(deleteSite);
     displaySinglePath.append(name);
@@ -215,14 +217,6 @@ function deleteSite(event){
     type: 'DELETE', // define the type of HTTP verb we want to use (POST for our form)
     url: '/deleteSite/'+ event.target.className+"/"+event.target.id , // the url where we want to POST
     contentType: 'application/json',
-    // data: JSON.stringify({
-    //     "id": $("#id_field").val(),
-    //     "start_date": $("#start_date").val(),
-    //     "duration": $("#duration").val(),
-    //     "price": $("#price").val(),
-    //     "guide": guide,
-    //     "path": path,             
-    // }),
     processData: false,            
    // dataType: 'json', // what type of data do we expect back from the server
     encode: true,
@@ -230,9 +224,9 @@ function deleteSite(event){
         // location.href = "/main";
         alert("site: "+ event.target.id +" had been delete" );
         let i = getId(event.target.className);
-        for(let j= 0; j < toursArray[i][1].path.length; j++){
-          toursArray[i][1].path[j].name === event.target.id ? 
-          toursArray[i][1].path.splice(j,1) : null;
+        for(let j= 0; j < toursArray[i].path.length; j++){
+          toursArray[i].path[j].name === event.target.id ? 
+          toursArray[i].path.splice(j,1) : null;
 
         }
         displayTours();
@@ -250,9 +244,9 @@ function sortBy(event){
   if(sortType === "id_Tour")
   {
     toursArray.sort((val1, val2)=>{
-      if(val1[0] > val2[0])
+      if(val1.name > val2.name)
         return 1;
-      else if(val1[0] < val2[0])
+      else if(val1.name < val2.name)
         return -1;
       else 
         return 0;
@@ -261,9 +255,9 @@ function sortBy(event){
   else if(sortType === "price")
   {
     toursArray.sort((val1, val2)=>{
-      if(val1[1].price > val2[1].price)
+      if(val1.price > val2.price)
         return 1;
-      else if(val1[1].price < val2[1].price)
+      else if(val1.price < val2.price)
         return -1;
       else 
         return 0;
@@ -273,9 +267,9 @@ function sortBy(event){
   else if(sortType === "start_date")
   {
     toursArray.sort((val1, val2)=>{
-      if(val1[1].start_date > val2[1].start_date)
+      if(val1.start_date > val2.start_date)
       return 1;
-      else if(val1[1].start_date < val2[1].start_date)
+      else if(val1.start_date < val2.start_date)
       return -1;
       else 
       return 0;
@@ -284,9 +278,9 @@ function sortBy(event){
   else if(sortType === "duration")
   {
     toursArray.sort((val1, val2)=>{
-      if(val1[1].duration > val2[1].duration)
+      if(val1.duration > val2.duration)
       return 1;
-      else if(val1[1].duration < val2[1].duration)
+      else if(val1.duration < val2.duration)
       return -1;
       else 
       return 0;

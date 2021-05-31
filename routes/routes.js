@@ -7,7 +7,7 @@ var router = express.Router();
 ///  --------------------CRUD------------------------------
 //create
 router.post('/createGuide', tripsRoutes.createGuide);
-router.post('/createTour', tripsRoutes.createTour);
+router.post('/createTour/:id', tripsRoutes.createTour);
 router.post('/createSiteInPath/:id', tripsRoutes.createSiteInPath);
 //update
 router.put('/updateTour/:id', tripsRoutes.updateTour);

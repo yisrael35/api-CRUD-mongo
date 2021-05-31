@@ -10,7 +10,9 @@ const Tour = require('../models/tour')
     
     // CREATE
     createTour: function (req, res) {
-        const tour = new Tour(req.body)
+        const tour = new Tour(req.body);
+        console.log(req.body);
+
         tour.save().then(tour => {
             res.status(201).send(tour)
         }).catch(e => {
@@ -26,26 +28,12 @@ const Tour = require('../models/tour')
     },
     //READ
     getTours: function (req, res) {
-        Tour.find().then(tours =>//sort -- need to check .sort(name)
-            res.send(tours)
-        ).catch(e => res.status(500).send())
-    //     fs.readFile(dataPath, 'utf8', (err, data) => {
-    //     // console.log("im here!");
-    //         if (err) {
-    //         console.log(err);
-    //         res.sendStatus(500);                 
-    //     }
-    //     else 
-    //     {
-    //         let tempData = data?  JSON.parse(data) : null;
-    //         let dataArr = [];
-    //         for(let i in tempData)
-    //         {
-    //             dataArr.push([i, tempData[i]]);
-    //         }
-    //         res.send(!dataArr? "{}" : dataArr.sort()) ;
-    //     }
-    // });
+        // Tour.find().then(tours =>//sort -- need to check .sort(name)
+        //     res.send(tours.sort())
+        // ).catch(e => res.status(500).send())
+        Tour.find().populate('guide').then(tours => res.send(tours.sort())
+        ).catch (e=> res.status(500).send())
+
 
     },
     getGuides: function (req, res) {
@@ -58,7 +46,8 @@ const Tour = require('../models/tour')
         const tripId = req.params["id"];
         if (!tripId) return res.status(400).send('Id is missing!');
 
-        Tour.findById(tripId).then(tours =>
+
+        Tour.findById(tripId).populate('guide').then(tours =>
             res.send(tours)
         ).catch(e => res.status(500).send())
 

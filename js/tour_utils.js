@@ -1,5 +1,5 @@
 $(document).ready(function () {
-   
+
     $("form[name='tour_form']").validate({
         // Specify validation rules
         rules: {
@@ -115,7 +115,7 @@ $(document).ready(function () {
             url: '/createTour/'+ $("#id_field").val(), // the url where we want to POST
             contentType: 'application/json',
             data: JSON.stringify({
-                "id": $("#id_field").val(),
+                "name": $("#id_field").val(),
                 "start_date": $("#start_date").val(),
                 "duration": $("#duration").val(),
                 "price": $("#price").val(),
