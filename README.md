@@ -14,7 +14,9 @@ main file: ./server.js
 
 ### init the project: npm i
 
-start the project: node server.js || nodemon
+Start the project: node server.js || nodemon
+
+In the browser write: http://localhost:3001/SiteList.html
 
 ### Create by: Yisrael Bar
 

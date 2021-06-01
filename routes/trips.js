@@ -5,14 +5,12 @@ const Tour = require('../models/tour')
 
 
 
-    // CRUD for guide and tour
+    // CRUD for guide and tour - each action go to the mongo db 
     module.exports = {
     
     // CREATE
     createTour: function (req, res) {
         const tour = new Tour(req.body);
-        console.log(req.body);
-
         tour.save().then(tour => {
             res.status(201).send(tour)
         }).catch(e => {
@@ -31,93 +29,76 @@ const Tour = require('../models/tour')
     {
         const tripId = req.params["id"];
         if (!tripId) return res.status(400).send('Id is missing!');
-       
+        if(!req.body) return res.status(400).send('Body is missing!');
+        if(!req.body.name || !req.body.country) return res.status(400).send('fields are missing!');
+
         const updates = Object.keys(req.body);
         const allowedUpdates = ['name', 'country'];
         const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
-    
         if (!isValidOperation) {
             return res.status(400).send({ error: 'Invalid updates!' })
         }
-        // Tour.updateOne({ name: tripId},  { $push: { path: req.body } },done);
-
         Tour.updateOne({name : req.params.id},  { $push: {path: req.body }}, { new: true, runValidators: false }).then(tour => {//disabled runValidators
             if (!tour) {
                 return res.status(404).send()
             }
             else {
-                console.log(tour)
-                res.send(tour)
+                // console.log(tour)
+                tour.n == 0 ? res.send("ID does not exist"):
+                res.send("Tour updated")
             }
         }).catch(e => res.status(400).send(e))
     
-        //     if(!req.body) return res.status(400).send('Body is missing!');
-        //     if (!tripId) return res.status(400).send('Id is missing!');
-        //     if(!req.body.name || !req.body.country) return res.status(400).send('fields are missing!');
            
     },
 
     //READ
     getTours: function (req, res) {
+        //return all the tours with the guides details inside
         Tour.find().populate('guide').then(tours => res.send(tours.sort())
         ).catch (e=> res.status(500).send())
     },
     getGuides: function (req, res) {
-        Guide.find().then(guides =>//sort -- need to check .sort(name)
+        Guide.find().then(guides =>
             res.send(guides)
         ).catch(e => res.status(500).send())
     },
     getTour: function (req, res)
     {
+        //get a tour by name and return it
         const tripId = req.params["id"];
         if (!tripId) return res.status(400).send('Id is missing!');
-
-
-        Tour.findById({name:tripId}).populate('guide').then(tours =>
-            res.send(tours)
+        Tour.findOne({name:tripId}).populate('guide').then(tour =>
+            tour ? 
+            res.send(tour): res.send("ID does not exist") 
         ).catch(e => res.status(500).send())
-
-        // Tour.findOne(name : tripId).then(tours =>
-        //     res.send(tours)
-        // ).catch(e => res.status(500).send())
     },
     //--------------------- UPDATE------------------------------------
 
     updateTour: function (req, res) {
+        const tripId = req.params["id"];
+        //Validators
+        if (!tripId) return res.status(400).send('Id is missing!');
+        if(!req.body) return res.status(400).send('Body is missing!');
 
-        
-            const tripId = req.params["id"];
-            if (!tripId) return res.status(400).send('Id is missing!');
-
-            const updates = Object.keys(req.body)
-            const allowedUpdates = ['start_date', 'duration', 'price']
-            const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
-        
-            if (!isValidOperation) {
-                return res.status(400).send({ error: 'Invalid updates!' })
+        const updates = Object.keys(req.body)
+        const allowedUpdates = ['start_date', 'duration', 'price']
+        const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
+    
+        if (!isValidOperation) {
+            return res.status(400).send({ error: 'Invalid updates!' })
+        }
+        //update the mongo db and return the updated object
+        Tour.updateOne({name : req.params.id}, req.body, { new: true, runValidators: true }).then(tour => {
+            if (!tour) {
+                return res.status(404).send()
             }
-        
-            Tour.updateOne({name : req.params.id}, req.body, { new: true, runValidators: true }).then(tour => {
-                if (!tour) {
-                    return res.status(404).send()
-                }
-                else {
-                    console.log(tour)
-                    res.send(tour)
-                }
-            }).catch(e => res.status(400).send(e))
-
-        //     if(!req.body) return res.status(400).send('Body is missing!');
-        //     if(tripId !== req.body.id) return res.status(400).send('Id is not matching');
-        //     if(checkReqBodyTour(req) === 400) return res.status(400).send('Body isnt valid!');
-        //     if (data[tripId])
-        //         data[tripId] = req.body;
-        //     else res.status(400).send('Tour doesnt exists!');
-        //     writeFile(JSON.stringify(data, null, 2), () => {
-        //         res.status(200).send(`trips id:${tripId} updated`);
-        //     });
-        // },
-        //     true);
+            else {
+                // console.log(tour)
+                tour.n == 0 ? res.send("ID does not exist"):
+                res.send("Tour updated")
+            }
+        }).catch(e => res.status(400).send(e))
     },
 
 //--------------------- DELETE------------------------------------
@@ -131,7 +112,7 @@ const Tour = require('../models/tour')
                 return res.status(404).send()
             }
             else {
-                console.log(tour)
+                tour.n == 0 ? res.send("ID does not exist"):
                 res.send(tour)
             }
         }).catch(e => res.status(400).send(e))
@@ -140,8 +121,10 @@ const Tour = require('../models/tour')
     deleteTour: function (req, res) {
         const tripId = req.params["id"];
         if (!tripId) return res.status(400).send('Id is missing!');
-        Tour.remove({name:tripId}).then(tour => res.send(tour)
-        ).catch (e=> res.status(500).send());//name or id??????????????
+        Tour.remove({name:tripId}).then(tour => 
+            tour.n !=0 ? 
+            res.send("Tour deleted"): res.send("There is no such tour") 
+        ).catch (e=> res.status(500).send("There is no such tour"));//name or id??????????????
 
 
     }
