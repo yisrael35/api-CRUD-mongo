@@ -1,6 +1,8 @@
 // Yisrael Bar 30-31/05/21
 
 let toursArray = [];
+let guidesArray = [];
+
 const br =  $("<br>");
 let saveId = -1;
 
@@ -507,8 +509,9 @@ function updateValidation (){
 
 }
 
-
+//make an ajax call to get all tours that a speacfic guide made
 function getToursByGuide(event){
+  hideUpdateGuide();
   let guideId = event.target.value;
   let res =$.ajax({
     type: 'GET',
@@ -525,8 +528,6 @@ function getToursByGuide(event){
   return res;
 
 }
-
-let guidesArray = [];
 
 //make an ajax call to get all guides from server side that get it from monogo db
 function getGuides(){
@@ -554,8 +555,8 @@ function displayGuides(){
   }
 }
 
+//make an ajax call to delete the guide by id from mongo db
 function deleteGuide(){
-
   $.ajax({
     type: 'DELETE', // define the type of HTTP verb we want to use (POST for our form)
     url: '/deleteGuide/'+ $("#guide_name").val(), // the url where we want to POST
@@ -580,6 +581,7 @@ function deleteGuide(){
 
 }
 
+//display on screen the details of selected guide
 function editGuide(){
   $("#update_guide").show();
   let guide ;
@@ -597,7 +599,6 @@ function hideUpdateGuide(){
   $("#update_guide").hide();
 
 }
-
 
 //make the update on guide
 function updateGuide(){
@@ -637,6 +638,7 @@ function updateGuide(){
   hideUpdateGuide();
 }
 
+//validate all the fileds for update a guide
 function updateGuideValidation(){
   $("form[name='updateGuide0']").validate({
     // Specify validation rules

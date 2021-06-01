@@ -7,8 +7,7 @@ const Tour = require('../models/tour')
 
     // CRUD for guide and tour - each action go to the mongo db 
     module.exports = {
-    
-    // CREATE
+    //--------------------- CREATE------------------------------------
     createTour: function (req, res) {
         const tour = new Tour(req.body);
         tour.save().then(tour => {
@@ -38,7 +37,7 @@ const Tour = require('../models/tour')
         if (!isValidOperation) {
             return res.status(400).send({ error: 'Invalid updates!' })
         }
-        Tour.updateOne({name : req.params.id},  { $push: {path: req.body }}, { new: true, runValidators: false }).then(tour => {//disabled runValidators
+        Tour.updateOne({name : req.params.id},  { $addToSet: {path: req.body }}, { new: true, runValidators: false }).then(tour => {//disabled runValidators
             if (!tour) {
                 return res.status(404).send()
             }
@@ -51,8 +50,8 @@ const Tour = require('../models/tour')
     
            
     },
-
-    //READ
+    
+    //--------------------- READ------------------------------------
     getTours: function (req, res) {
         //return all the tours with the guides details inside
         Tour.find().populate('guide').then(tours => res.send(tours.sort())
@@ -82,8 +81,8 @@ const Tour = require('../models/tour')
             res.send(tour): res.send("ID does not exist") 
         ).catch(e => res.status(500).send())
     },
-    //--------------------- UPDATE------------------------------------
 
+    //--------------------- UPDATE------------------------------------
     updateTour: function (req, res) {
         const tripId = req.params["id"];
         //Validators
@@ -136,7 +135,7 @@ const Tour = require('../models/tour')
         }).catch(e => res.status(400).send(e))
     },
 
-//--------------------- DELETE------------------------------------
+    //--------------------- DELETE------------------------------------
     deleteSite: function (req, res)
     {
         const tripId = req.params["id"];
