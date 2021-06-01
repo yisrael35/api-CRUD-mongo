@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const id_validator = require ('mongoose-id-validator');
 
 var tourSchema = new mongoose.Schema({
-    name: {//name || need to check if have auto id
+    name: {
         type: String,
         required: true,
         trim: true
@@ -13,7 +13,7 @@ var tourSchema = new mongoose.Schema({
         trim: true
     },
     duration: {
-        type: Number,//need to check if int exist
+        type: Number,
         required: true,
         trim: true
     },

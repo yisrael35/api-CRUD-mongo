@@ -27,7 +27,9 @@
             <button><a href="add_guide_form.html">Add New Guide</a></button>
             <br>
            
-            <!--guide list -- the data comes in ajax call in tour_utils.js  -->
+            <!--guide list -- the data comes in ajax call in tour_utils.js 
+            dispaly on screen on guide buttons
+            -->
             <label for="guide_name">Choose a guide to display his tours:</label>
             <select name="guide_name" id="guide_name" onchange="getToursByGuide(event)">             
             </select>
@@ -35,6 +37,8 @@
             <button onclick="editGuide()">Edit/Details guide</button>
             <button onclick="deleteGuide()">Delete</button>
             <br>
+
+            <!-- sore the tours by the next selection -->
             <label for="sort">Choose how to sort:</label>
                 <select name="sort" id="sort" onchange="sortBy(event)">
                   <option value="id_Tour" selected >Tour name</option>
@@ -48,26 +52,19 @@
 
         <br>
         <section >
-            
+            <!-- in siteList.js we appending data the div's here -->
             <div id="displayTours"></div>
             <div id="displayTour"></div>
             <div id="displayDetailes"></div>
             <div id="editTour">
                 <div class="col-sm-6 col-sm-offset-3">
-
                     <h1>Update Tour</h1>
-            
-                    <!-- OUR FORM -->
+                    <!--  update a tour FORM -->
                     <form id="tour_form" name="tour_form" method="UPDATE">
-            
                         <!-- NAME -->
-                        <!-- ID -->
-
                         <h4 >
                             Tour id is: <span id="id_field"></span>
-                        </h4>
-               
-            
+                        </h4>            
                         <!-- starting date -->
                         <div id="date-group" class="form-group">
                             <div id="displayDate"></div>
@@ -76,8 +73,6 @@
                                 required>
                             <!-- errors will go here -->
                         </div>
-            
-            
                         <!-- duration -->
                         <div id="duration-group" class="form-group">
                             <label for="duration">duration:</label>
@@ -92,26 +87,19 @@
                             <input type="number" class="form-control" name="price" id="price" placeholder="1.0">
                             <!-- errors will go here -->
                         </div>
-                       
-                                 <!-- path -->
+                         <!-- path -->
                         <h3>path</h3>
                         <div id ="path">                        
                         </div>
-                    
-                        <br>
-                        <!-- <br> -->
-            
-            
+                        <br>           
                         <button type="submit" class="btn btn-success">Submit <span class="fa fa-arrow-right"></span></button>
-                        
                     </form>
-                        <!-- <button onclick="add_site()">add site</button> -->
                     <button onclick="closeUpdate()">close update</button>
                 </div>
             </div>
+            <!-- add site form - display: hide onLoad page -->
             <form id="add_site_form"  name="add_site0" method="POST">
-
-            <div id="add_site">
+                <div id="add_site">
                     <div id= "site_id">
 
                     </div>
@@ -130,13 +118,10 @@
                     <button onclick="add_site()" type="submit">Add Site</button>
                 </div>
             </form>
-
-
-
                <br>
+               <!-- update a guide - display: hide onLoad page -->
                <div id="update_guide">
                 <form id="updateGuide0"  name="updateGuide0" method="POST">
-
                    <!-- guide of the trip -->
                    <h3>guide</h3>
                    <div id="guide-group" class="form-group">
@@ -155,11 +140,9 @@
                     </div>
                     <button onclick="updateGuide()" type="submit">update</button>
                     <br>
-                    
                     <br>
                 </form>
                 <button onclick="hideUpdateGuide()" >hide</button>
-
                 </div>
         </section>
         

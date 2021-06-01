@@ -1,6 +1,6 @@
 let guidesArray = [];
 
-
+// load the validate ruls and the ajax call when submit is pressed
 $(document).ready(function () {
   //get all guides and add to guidesArray
   getGuides();
@@ -70,10 +70,7 @@ $(document).ready(function () {
 
     // process the tour form
     $('#tour_form').submit(function (event) {
-        if(!$("#tour_form").valid()) return;
-
-        console.log("in submit");
-       
+        if(!$("#tour_form").valid()) return;       
         let singlePath = {
           "name": $("#site").val(),
           "country": $("#country").val(),

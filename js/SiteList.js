@@ -25,7 +25,6 @@ $(document).ready( loadPage);
     url: "/getTours",
     dataType: 'json',
     success: function (data) {
-      // console.log(data);
       toursArray = data;
       displayTours();
     },
@@ -44,7 +43,6 @@ function displayTours(){
   closeAddSite();
   let allTours = $("<div></div>").attr('class',"allTours");
 
-  // console.log(toursArray[0]);
   
   for(let i = 0; i< toursArray.length; i++ ){
    
@@ -100,7 +98,6 @@ function displayTour(event){
   displaySingleTour.append(guide);
   displaySingleTour.append(br);
   displaySingleTour.append(path);
-  // displaySingleTour.append(br);
 
   $("#displayTour").append(displaySingleTour);
 
@@ -131,9 +128,7 @@ function editTour(event){
   $("#start_date").val(toursArray[i].start_date);
   $("#duration").val(toursArray[i].duration);
   $("#price").val(toursArray[i].price);
-  // $("#guide_name").val(toursArray[i].guide.name);
-  // $("#guide_email").val(toursArray[i][1].guide.email);
-  // $("#guide_cellular").val(toursArray[i][1].guide.cellular);
+  
 
   // $("#site").val(toursArray[i][1].path[0].name);
   // $("#country").val(toursArray[i][1].path[0].country);
@@ -153,7 +148,6 @@ function editTour(event){
     $("#path").append(newSite);
   }
 
-  // $("#editTour").append(editTour);
 
 }
 //make an ajax call to server to delete tour
@@ -311,9 +305,7 @@ function add_site(){
       // dataType: 'json', // what type of data do we expect back from the server
         encode: true,
         success: function(data){
-            console.log(data);
             location.href = "/SiteList";
-
         },
         error: function(errorThrown ){
             console.log( errorThrown );
@@ -329,28 +321,16 @@ function updateTourRequest(){
   updateValidation();
   $('#tour_form').submit(function (event) {
     if(!$("#tour_form").valid()) return;
-  
-    // console.log("in submit");
-    // let guide ={
-    //   "name": $("#guide_name").val(),
-    //   "email": $("#guide_email").val(),
-    //   "cellular": $("#guide_cellular").val(),
-    // }
-    // let guide =toursArray[saveId].guide._id; 
-    // let path = toursArray[saveId].path;
-    
     // process the form
     $.ajax({
         type: 'PUT', // define the type of HTTP verb we want to use (POST for our form)
         url: '/updateTour/'+ $("#id_field").text(), // the url where we want to POST
         contentType: 'application/json',
         data: JSON.stringify({
-            // "id": $("#id_field").text(),
             "start_date": $("#start_date").val(),
             "duration": $("#duration").val(),
             "price": $("#price").val(),
-            // "guide": guide,
-            // "path": path,             
+                      
         }),
         processData: false,            
        // dataType: 'json', // what type of data do we expect back from the server
@@ -358,7 +338,6 @@ function updateTourRequest(){
         success: function( data ){
             console.log(data);
             location.href = "/SiteList";
-  
         },
         error: function( errorThrown ){
             console.log( errorThrown );
@@ -435,23 +414,6 @@ function updateValidation (){
         digits: true,   
         min: 1,
       },
-      // "guide_name":{
-      //   required: true,
-      //   digits: false,   
-      //   minlength: 2,
-      // },
-      // "guide_email":{
-      //   required: true,
-      //   digits: false,   
-      //   minlength: 5,
-      //   email: true,
-      // },
-      // "guide_cellular":{
-      //   required: true,
-      //   digits: true,   
-      //   minlength: 10,
-      //   min: 1,
-      // },
       "site":{
         required: false,
         digits: false,   
@@ -484,20 +446,6 @@ function updateValidation (){
         min: "The number heve to be bigger then zero",
 
       },
-      // guide_name:{
-      //   minlength: "Your name must be at least 2 characters long",
-      // },
-      // guide_email:{
-      //   minlength: "Your name must be at least 5 characters long",
-      //   email:"You have email in form of:  NameExample@site.com"
-      
-      // },
-      // guide_cellular:{
-      //   minlength: "Your name must be at least 10 characters long",
-      //   min: "The number heve to be bigger then zero",
-      //   digits:"Please enter only digits",
-
-      // },
       site:{
         minlength: "Your name must be at least 2 characters long",
       },
@@ -602,11 +550,9 @@ function hideUpdateGuide(){
 
 //make the update on guide
 function updateGuide(){
-  console.log("im here0");
   updateGuideValidation();
  $('#updateGuide0').submit(function (event) {
     if(!$("#updateGuide0").valid()) return;
-    console.log("im here");
     
     // process the form
     $.ajax({
@@ -621,7 +567,6 @@ function updateGuide(){
         processData: false,            
         encode: true,
         success: function( data ){
-            console.log(data);
             location.href = "/SiteList";
   
         },

@@ -53,8 +53,17 @@ const Tour = require('../models/tour')
     
     //--------------------- READ------------------------------------
     getTours: function (req, res) {
-        //return all the tours with the guides details inside
-        Tour.find().populate('guide').then(tours => res.send(tours.sort())
+        //return all the tours with the guides details inside sortd by name
+        Tour.find().populate('guide').then(tours => res.send(tours.sort(
+            (val1, val2)=>{
+                if(val1.name > val2.name)
+                  return 1;
+                else if(val1.name < val2.name)
+                  return -1;
+                else 
+                  return 0;
+              }
+        ))
         ).catch (e=> res.status(500).send())
     },
     getToursByGuideId: function (req, res) {
