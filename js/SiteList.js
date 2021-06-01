@@ -515,11 +515,12 @@ function deleteGuide(){
     success: function(){
         // location.href = "/main";
         alert("site: "+  $("#guide_name").val() +" had been delete" );
-        for(let j= 0; j < guidesArray[i].length; j++){
-          guidesArray[i]._id ===  $("#guide_name").val() ? 
-          guidesArray[i].splice(j,1) : null;
+        for(let j= 0; j < guidesArray.length; j++){
+          guidesArray[j]._id ===  $("#guide_name").val() ? 
+          guidesArray.splice(j,1) : null;
 
         }
+        $("#guide_name").empty();
         displayGuides();
     },
     error: function( errorThrown ){

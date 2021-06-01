@@ -173,9 +173,9 @@ const Tour = require('../models/tour')
     deleteGuide: function (req, res) {
         const guideId = req.params["id"];
         if (!guideId) return res.status(400).send('Id is missing!');
-        Tour.remove({_id:guideId}).then(guide => 
+        Guide.deleteOne({_id:guideId}).then(guide => 
             guide.n !=0 ? 
-            res.send("Tour deleted"): res.send("There is no such guide") 
+            res.send("guide deleted"): res.send("There is no such guide") 
         ).catch (e=> res.status(500).send("There is no such guide"));
     }
 };
