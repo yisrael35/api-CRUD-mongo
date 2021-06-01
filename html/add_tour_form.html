@@ -57,24 +57,10 @@
             </div>
            
             <br>
-            <!-- guide of the trip -->
-            <h3>guide</h3>
-            <div id="guide-group" class="form-group">
-                <label for="guide">guide id</label>
-                <input type="text" class="form-control" name="guide_name" id="guide_name" placeholder="jhon" required>
-                <!-- errors will go here -->
-            </div>
-
-            <!-- guide email-->
-            <!-- <div id="guide-group" class="form-group">
-                <label for="guide">guide email</label>
-                <input type="text" class="form-control" name="guide_email" id="guide_email" placeholder="jhon@gmail.com" required>
-            </div>
-            guide cellular
-            <div id="guide-group" class="form-group">
-                <label for="guide">guide cellular</label>
-                <input type="text" class="form-control" name="guide_cellular" id="guide_cellular" placeholder="0523332200" required>
-            </div> -->
+            <!--guide list -- the data comes in ajax call in tour_utils.js  -->
+            <label for="guide_name">Choose a guide:</label>
+            <select name="guide_name" id="guide_name">             
+            </select>
 
             <br>
             <!-- path -->
@@ -96,10 +82,7 @@
             <button>add site</button> -->
             <br>
             <!-- <br> -->
-
-
-            <button type="submit" class="btn btn-success">Submit <span class="fa fa-arrow-right"></span></button>
-            
+            <button type="submit" class="btn btn-success">Submit <span class="fa fa-arrow-right"></span></button>            
         </form>
         <br>
         <button><a href="SiteList.html">Go back to site list</a></button>

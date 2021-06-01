@@ -1,5 +1,11 @@
-$(document).ready(function () {
+let guidesArray = [];
 
+
+$(document).ready(function () {
+  //get all guides and add to guidesArray
+  getGuides();
+
+//validate all fileds of the tour
     $("form[name='tour_form']").validate({
         // Specify validation rules
         rules: {
@@ -26,20 +32,7 @@ $(document).ready(function () {
           "guide_name":{
             required: true,
             digits: false,   
-            minlength: 2,
           },
-          // "guide_email":{
-          //   required: true,
-          //   digits: false,   
-          //   minlength: 5,
-          //   email: true,
-          // },
-          // "guide_cellular":{
-          //   required: true,
-          //   digits: true,   
-          //   minlength: 10,
-          //   min: 1,
-          // },
           "site":{
             required: false,
             digits: false,   
@@ -51,8 +44,6 @@ $(document).ready(function () {
             digits: false,   
             minlength: 2,
           },
-          
-          
           
         },
         // Specify validation error messages
@@ -67,22 +58,7 @@ $(document).ready(function () {
           price:{
             digits:"Please enter only digits",
             min: "The number heve to be bigger then zero",
-
           },
-          guide_name:{
-            minlength: "Your name must be at least 2 characters long",
-          },
-          // guide_email:{
-          //   minlength: "Your name must be at least 5 characters long",
-          //   email:"You have email in form of:  NameExample@site.com"
-          
-          // },
-          // guide_cellular:{
-          //   minlength: "Your name must be at least 10 characters long",
-          //   min: "The number heve to be bigger then zero",
-          //   digits:"Please enter only digits",
-
-          // },
           site:{
             minlength: "Your name must be at least 2 characters long",
           },
@@ -92,16 +68,12 @@ $(document).ready(function () {
         }
       });
 
-    // process the form
+    // process the tour form
     $('#tour_form').submit(function (event) {
         if(!$("#tour_form").valid()) return;
 
         console.log("in submit");
-        // let guide ={
-        //   "name": $("#guide_name").val(),
-        //   "email": $("#guide_email").val(),
-        //   "cellular": $("#guide_cellular").val(),
-        // }
+       
         let singlePath = {
           "name": $("#site").val(),
           "country": $("#country").val(),
@@ -140,3 +112,30 @@ $(document).ready(function () {
     });
 
 });
+
+//make an ajax call to get all guides from server side that get it from monogo db
+function getGuides(){
+  let res =$.ajax({
+  type: 'GET',
+  url: "/getGuides",
+  dataType: 'json',
+  success: function (data) {
+    guidesArray = data;
+    displayguides();
+  },
+  error: function (err) {
+    console.log("err", err);
+  }
+});
+return res;
+}
+//go thorw all the guides and added them to the scroll list of guides
+function displayguides(){
+  for(let i = 0; i < guidesArray.length ; i++){
+    const guide = $("<option></option>").text(guidesArray[i].name).val(guidesArray[i]._id);
+    $("#guide_name").append(guide);
+  }
+
+
+
+}
