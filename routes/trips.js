@@ -164,7 +164,7 @@ const Tour = require('../models/tour')
     deleteTour: function (req, res) {
         const tripId = req.params["id"];
         if (!tripId) return res.status(400).send('Id is missing!');
-        Tour.remove({name:tripId}).then(tour => 
+        Tour.deleteOne({name:tripId}).then(tour => 
             tour.n !=0 ? 
             res.send("Tour deleted"): res.send("There is no such tour") 
         ).catch (e=> res.status(500).send("There is no such tour"));
