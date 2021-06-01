@@ -7,9 +7,12 @@ let saveId = -1;
 let loadPage =  function() 
 {
   $("#editTour").hide();
+  $("#update_guide").hide();
   //get all tours from : /getTours
   getTours() ;
+  getGuides();
   updateTourRequest();
+  updateGuideValidation();
 };
 $(document).ready( loadPage);
 
@@ -499,6 +502,182 @@ function updateValidation (){
       country:{
         minlength: "Your name must be at least 2 characters long",
       },
+    },
+  });
+
+}
+
+
+function getToursByGuide(event){
+  let guideId = event.target.value;
+  let res =$.ajax({
+    type: 'GET',
+    url: "/getToursByGuideId/"+guideId,
+    dataType: 'json',
+    success: function (data) {
+      toursArray = data;
+      displayTours();
+    },
+    error: function (err) {
+      console.log("err", err);
+    }
+  });
+  return res;
+
+}
+
+let guidesArray = [];
+
+//make an ajax call to get all guides from server side that get it from monogo db
+function getGuides(){
+  let res =$.ajax({
+  type: 'GET',
+  url: "/getGuides",
+  dataType: 'json',
+  success: function (data) {
+    guidesArray = data;
+    displayGuides();
+  },
+  error: function (err) {
+    console.log("err", err);
+  }
+});
+return res;
+
+
+}
+//go thorw all the guides and added them to the scroll list of guides
+function displayGuides(){
+  for(let i = 0; i < guidesArray.length ; i++){
+    const guide = $("<option></option>").text(guidesArray[i].name).val(guidesArray[i]._id);
+    $("#guide_name").append(guide);
+  }
+}
+
+function deleteGuide(){
+
+  $.ajax({
+    type: 'DELETE', // define the type of HTTP verb we want to use (POST for our form)
+    url: '/deleteGuide/'+ $("#guide_name").val(), // the url where we want to POST
+    contentType: 'application/json',
+    processData: false,            
+   // dataType: 'json', // what type of data do we expect back from the server
+    encode: true,
+    success: function(){
+        // location.href = "/main";
+        alert("site: "+  $("#guide_name").val() +" had been delete" );
+        for(let j= 0; j < guidesArray[i].length; j++){
+          guidesArray[i]._id ===  $("#guide_name").val() ? 
+          guidesArray[i].splice(j,1) : null;
+
+        }
+        displayGuides();
+    },
+    error: function( errorThrown ){
+        console.log( errorThrown );
+    }
+  });
+
+}
+
+function editGuide(){
+  $("#update_guide").show();
+  let guide ;
+
+    console.log(guidesArray.length);
+  for (let i=0; i < guidesArray.length; i++){   
+    guidesArray[i]._id === $("#guide_name").val()? guide= guidesArray[i]:null; 
+  }
+  $("#guide_name0").val(guide.name);
+  $("#guide_email").val(guide.email);
+  $("#guide_cellular").val(guide.cellular);
+}
+//hide update guide section
+function hideUpdateGuide(){
+  $("#update_guide").hide();
+
+}
+
+
+//make the update on guide
+function updateGuide(){
+  console.log("im here0");
+  updateGuideValidation();
+ $('#updateGuide0').submit(function (event) {
+    if(!$("#updateGuide0").valid()) return;
+    console.log("im here");
+    
+    // process the form
+    $.ajax({
+        type: 'PUT', // define the type of HTTP verb we want to use (POST for our form)
+        url: '/updateGuide/'+ $("#guide_name").val(), // the url where we want to POST
+        contentType: 'application/json',
+        data: JSON.stringify({
+          "name": $("#guide_name0").val(),
+          "email": $("#guide_email").val(),
+          "cellular": $("#guide_cellular").val(),      
+        }),
+        processData: false,            
+        encode: true,
+        success: function( data ){
+            console.log(data);
+            location.href = "/SiteList";
+  
+        },
+        error: function( errorThrown ){
+            console.log( errorThrown );
+        }
+    })
+      
+    // stop the form from submitting the normal way and refreshing the page
+    event.preventDefault();
+  });
+
+
+  hideUpdateGuide();
+}
+
+function updateGuideValidation(){
+  $("form[name='updateGuide0']").validate({
+    // Specify validation rules
+    rules: {
+      
+      "guide_name0":{
+        required: true,
+        digits: false,   
+        minlength: 2,
+      },
+      "guide_email":{
+        required: true,
+        digits: false,   
+        minlength: 5,
+        email: true,
+      },
+      "guide_cellular":{
+        required: true,
+        digits: true,   
+        minlength: 10,
+        min: 1,
+      },
+    },
+    // Specify validation error messages
+    messages: {       
+      
+      guide_name0:{
+        minlength: "Your name must be at least 2 characters long",
+      },
+      guide_email:{
+        minlength: "Your name must be at least 5 characters long",
+        email:"You have email in form of:  NameExample@site.com"
+      
+      },
+      guide_cellular:{
+        minlength: "Your name must be at least 10 characters long",
+        min: "The number heve to be bigger then zero",
+        digits:"Please enter only digits",
+
+      },
+      
     },
   });
 

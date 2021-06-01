@@ -26,6 +26,14 @@
             <button><a href="add_tour_form.html">Add New Tour</a></button>
             <button><a href="add_guide_form.html">Add New Guide</a></button>
             <br>
+           
+            <!--guide list -- the data comes in ajax call in tour_utils.js  -->
+            <label for="guide_name">Choose a guide to display his tours:</label>
+            <select name="guide_name" id="guide_name" onchange="getToursByGuide(event)">             
+            </select>
+            <button onclick="getTours()">Reset</button>
+            <button onclick="editGuide()">Edit/Details guide</button>
+            <button onclick="deleteGuide()">Delete</button>
             <br>
             <label for="sort">Choose how to sort:</label>
                 <select name="sort" id="sort" onchange="sortBy(event)">
@@ -35,7 +43,9 @@
                   <option value="duration">Duration</option>
                   <option value="descent_order">Descent order</option>
                 </select>
+                <br>
         </div>
+
         <br>
         <section >
             
@@ -83,29 +93,7 @@
                             <!-- errors will go here -->
                         </div>
                        
-                        <!-- <br> -->
-                        <!-- guide of the trip -->
-                        <!-- <h3>guide</h3>
-                        <div id="guide-group" class="form-group">
-                            <label for="guide">guide name:</label>
-                            <input type="text" class="form-control" name="guide_name" id="guide_name" placeholder="jhon"> -->
-                            <!-- errors will go here -->
-                        <!-- </div> -->
-                        <!-- guide email-->
-                        <!-- <div id="guide-group" class="form-group">
-                            <label for="guide">guide email:</label>
-                            <input type="text" class="form-control" name="guide_email" id="guide_email" placeholder="jhon"> -->
-                            <!-- errors will go here -->
-                        <!-- </div> -->
-                        <!-- guide cellular -->
-                        <!-- <div id="guide-group" class="form-group">
-                            <label for="guide">guide cellular:</label>
-                            <input type="text" class="form-control" name="guide_cellular" id="guide_cellular" placeholder="jhon"> -->
-                            <!-- errors will go here -->
-                        <!-- </div> -->
-            
-                        <!-- <br> -->
-                        <!-- path -->
+                                 <!-- path -->
                         <h3>path</h3>
                         <div id ="path">                        
                         </div>
@@ -142,6 +130,37 @@
                     <button onclick="add_site()" type="submit">Add Site</button>
                 </div>
             </form>
+
+
+
+               <br>
+               <div id="update_guide">
+                <form id="updateGuide0"  name="updateGuide0" method="POST">
+
+                   <!-- guide of the trip -->
+                   <h3>guide</h3>
+                   <div id="guide-group" class="form-group">
+                       <label for="guide">guide name:</label>
+                       <input type="text" class="form-control" name="guide_name0" id="guide_name0" placeholder="jhon"> 
+                    </div>
+                    <!-- guide email-->
+                    <div id="guide-group" class="form-group">
+                        <label for="guide">guide email:</label>
+                        <input type="text" class="form-control" name="guide_email" id="guide_email" placeholder="jhon@gmail.com"> 
+                    </div>
+                    <!-- guide cellular -->
+                    <div id="guide-group" class="form-group">
+                        <label for="guide">guide cellular:</label>
+                        <input type="text" class="form-control" name="guide_cellular" id="guide_cellular" placeholder="0501234567">
+                    </div>
+                    <button onclick="updateGuide()" type="submit">update</button>
+                    <br>
+                    <button onclick="hideUpdateGuide()" >hide</button>
+                    
+                    <br>
+                 </form>
+
+                </div>
         </section>
         
         <br>

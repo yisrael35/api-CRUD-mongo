@@ -13,11 +13,14 @@ router.post('/createSiteInPath/:id', tripsRoutes.createSiteInPath);
 router.get('/getTours', tripsRoutes.getTours);
 router.get('/getTour/:id', tripsRoutes.getTour);
 router.get('/getGuides', tripsRoutes.getGuides);
+router.get('/getToursByGuideId/:id', tripsRoutes.getToursByGuideId);
 //update
 router.put('/updateTour/:id', tripsRoutes.updateTour);
+router.put('/updateGuide/:id', tripsRoutes.updateGuide);
 //delete
 router.delete('/deleteSite/:id/:site_name', tripsRoutes.deleteSite);
 router.delete('/deleteTour/:id', tripsRoutes.deleteTour);
+router.delete('/deleteGuide/:id', tripsRoutes.deleteGuide);
 
 
 

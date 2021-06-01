@@ -58,6 +58,15 @@ const Tour = require('../models/tour')
         Tour.find().populate('guide').then(tours => res.send(tours.sort())
         ).catch (e=> res.status(500).send())
     },
+    getToursByGuideId: function (req, res) {
+        //return all the tours with the guide details inside by guide id
+        const guideId = req.params["id"];
+        //Validators
+        if (!guideId) return res.status(400).send('Id is missing!');
+
+        Tour.find({guide: guideId}).populate('guide').then(tours => res.send(tours.sort())
+        ).catch (e=> res.status(500).send())
+    },
     getGuides: function (req, res) {
         Guide.find().then(guides =>
             res.send(guides)
@@ -101,6 +110,32 @@ const Tour = require('../models/tour')
         }).catch(e => res.status(400).send(e))
     },
 
+    updateGuide: function (req, res) {
+        const guideId = req.params["id"];
+        //Validators
+        if (!guideId) return res.status(400).send('Id is missing!');
+        if(!req.body) return res.status(400).send('Body is missing!');
+
+        const updates = Object.keys(req.body)
+        const allowedUpdates = ['name', 'email', 'cellular']
+        const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
+    
+        if (!isValidOperation) {
+            return res.status(400).send({ error: 'Invalid updates!' })
+        }
+        //update the mongo db and return the updated object
+        Guide.updateOne({_id : req.params.id}, req.body, { new: true, runValidators: true }).then(guide => {
+            if (!guide) {
+                return res.status(404).send()
+            }
+            else {
+                // console.log(tour)
+                guide.n == 0 ? res.send("ID does not exist"):
+                res.send("Guide updated")
+            }
+        }).catch(e => res.status(400).send(e))
+    },
+
 //--------------------- DELETE------------------------------------
     deleteSite: function (req, res)
     {
@@ -124,31 +159,16 @@ const Tour = require('../models/tour')
         Tour.remove({name:tripId}).then(tour => 
             tour.n !=0 ? 
             res.send("Tour deleted"): res.send("There is no such tour") 
-        ).catch (e=> res.status(500).send("There is no such tour"));//name or id??????????????
-
-
+        ).catch (e=> res.status(500).send("There is no such tour"));
+    },
+    
+    deleteGuide: function (req, res) {
+        const guideId = req.params["id"];
+        if (!guideId) return res.status(400).send('Id is missing!');
+        Tour.remove({_id:guideId}).then(guide => 
+            guide.n !=0 ? 
+            res.send("Tour deleted"): res.send("There is no such guide") 
+        ).catch (e=> res.status(500).send("There is no such guide"));
     }
 };
 
-function checkReqBodyTour(req){
-    if(!req.body.id || !req.body.start_date || !req.body.duration || !req.body.price || !req.body.guide.name 
-        // || !req.body.guide.email || !req.body.guide.cellular
-         )
-        return 400;
-    if(!Number.isInteger(Number(req.body.duration)) || !Number.isInteger(Number(req.body.price)) 
-    // || !Number.isInteger(Number(req.body.guide.cellular))
-    ) 
-        return 400;
-    if(req.body.duration <= 0 || req.body.price <= 0 
-        // || req.body.guide.cellular.length < 10
-        )
-        return 400;
-    // if(!req.body.guide.email.includes("@"))
-    //     return 400;
-}
-function checkReqBodyGuide(req){
-    if(!req.body.guide.email || !req.body.guide.cellular || !Number.isInteger(Number(req.body.guide.cellular))
-    || req.body.guide.cellular.length < 10 || !req.body.guide.email.includes("@")
-    )
-    return 400;
-}
